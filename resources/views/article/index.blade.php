@@ -1,24 +1,11 @@
 <x-layout>
 
-    @if (session('message'))
-        <div class="alert alert-success text-center mb-0">
-            {{ session('message') }}
-        </div>
-    @endif
-
-    <section class="container min-vh-75 d-flex justify-content-center align-items-center">
-        <div class="text-center">
-            <h1 class="display-1 fw-bold">The Aulab Post</h1>
-            <p class="lead">Il blog degli sviluppatori Aulab</p>
-        </div>
-    </section>
-
     <section class="container py-5">
-        <h2 class="text-center mb-5">Ultimi articoli</h2>
+        <h1 class="text-center mb-5">Tutti gli articoli</h1>
 
         <div class="row g-4">
             @forelse ($articles as $article)
-                <div class="col-12 col-md-6 col-lg-3">
+                <div class="col-12 col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm">
                         <img 
                             src="{{ Storage::url($article->image) }}" 
@@ -52,7 +39,7 @@
                 </div>
             @empty
                 <div class="col-12">
-                    <p class="text-center">Non ci sono ancora articoli.</p>
+                    <p class="text-center">Non ci sono articoli.</p>
                 </div>
             @endforelse
         </div>

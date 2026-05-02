@@ -13,18 +13,15 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="nav-link active" href="{{ route('homepage') }}">Home</a>
+    </li>
 
-                @guest
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Registrati</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Accedi</a>
-                    </li>
-                @endguest
-
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('article.index') }}">Tutti gli articoli</a>
+    </li>
+</ul>
                 @auth
     <li class="nav-item">
         <a class="nav-link" href="{{ route('article.create') }}">Inserisci articolo</a>
