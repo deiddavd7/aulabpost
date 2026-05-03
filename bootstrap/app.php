@@ -1,3 +1,5 @@
+
+
 <?php
 
 use Illuminate\Foundation\Application;
@@ -14,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\UserIsAdmin::class,
             'revisor' => \App\Http\Middleware\UserIsRevisor::class,
+            'writer' => \App\Http\Middleware\UserIsWriter::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

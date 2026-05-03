@@ -18,11 +18,13 @@ Route::get('/articles/category/{category}', [ArticleController::class, 'byCatego
 Route::get('/articles/user/{user}', [ArticleController::class, 'byUser'])->name('article.byUser');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('article.create');
-    Route::post('/articles/store', [ArticleController::class, 'store'])->name('article.store');
-
     Route::get('/careers', [PublicController::class, 'careers'])->name('careers');
     Route::post('/careers/submit', [PublicController::class, 'careersSubmit'])->name('careers.submit');
+});
+
+Route::middleware(['auth', 'writer'])->group(function () {
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('article.create');
+    Route::post('/articles/store', [ArticleController::class, 'store'])->name('article.store');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

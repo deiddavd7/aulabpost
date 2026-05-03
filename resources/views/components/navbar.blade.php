@@ -1,13 +1,8 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('homepage') }}">The Aulab Post</a>
 
-        <button 
-            class="navbar-toggler" 
-            type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarSupportedContent"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -16,25 +11,31 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('homepage') }}">Home</a>
+                    <a class="nav-link" href="{{ route('homepage') }}">Home</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('article.index') }}">Tutti gli articoli</a>
+                    <a class="nav-link" href="{{ route('article.index') }}">Articoli</a>
                 </li>
 
                 @auth
+                    @if (auth()->user()->is_writer)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('article.create') }}">Inserisci articolo</a>
+                        </li>
+                    @endif
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('careers') }}">Lavora con noi</a>
                     </li>
 
-                    @if (Auth::user()->is_admin)
+                    @if (auth()->user()->is_admin)
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
                         </li>
                     @endif
 
-                    @if (Auth::user()->is_revisor)
+                    @if (auth()->user()->is_revisor)
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('revisor.dashboard') }}">Dashboard Revisor</a>
                         </li>
@@ -47,47 +48,34 @@
 
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Registrati</a>
+                        <a class="nav-link" href="{{ route('login') }}">Accedi</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Accedi</a>
+                        <a class="nav-link" href="{{ route('register') }}">Registrati</a>
                     </li>
                 @endguest
 
                 @auth
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('article.create') }}">Inserisci articolo</a>
-                    </li>
-
-                    <li class="nav-item">
                         <span class="nav-link">
-                            Ciao, {{ Auth::user()->name }}
+                            Ciao, {{ auth()->user()->name }}
                         </span>
                     </li>
 
                     <li class="nav-item">
-                        <a 
-                            class="nav-link" 
-                            href="#"
-                            onclick="event.preventDefault(); document.querySelector('#form-logout').submit();"
-                        >
-                            Logout
-                        </a>
-
-                        <form 
-                            id="form-logout" 
-                            action="{{ route('logout') }}" 
-                            method="POST" 
-                            class="d-none"
-                        >
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
+                            <button type="submit" class="btn btn-link nav-link">
+                                Logout
+                            </button>
                         </form>
                     </li>
                 @endauth
 
             </ul>
+
         </div>
     </div>
 </nav>
-   
+
