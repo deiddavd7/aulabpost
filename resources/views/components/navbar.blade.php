@@ -8,7 +8,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            {{-- LINK SINISTRA --}}
+
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
@@ -33,13 +33,12 @@
 
             </ul>
 
-            {{-- RICERCA --}}
-            <form class="d-flex me-3" role="search">
-                <input class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
+            <form class="d-flex me-3" role="search" action="{{ route('article.search') }}" method="GET">
+                <input class="form-control me-2" type="search" name="query" placeholder="Cerca articoli"
+                    aria-label="Search" value="{{ request('query') }}">
                 <button class="btn btn-outline-success" type="submit">Cerca</button>
             </form>
 
-            {{-- LINK DESTRA --}}
             <ul class="navbar-nav mb-2 mb-lg-0">
 
                 @guest
@@ -96,7 +95,8 @@
                     </li>
                 @endauth
 
-             </ul>
+            </ul>
+
         </div>
     </div>
 </nav>
