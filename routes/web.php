@@ -1,15 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PublicController;
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\RevisorController;
 
 Route::get('/', [PublicController::class, 'homepage'])->name('homepage');
 
 Route::get('/home', function () {
     return redirect()->route('homepage');
 })->name('home');
+
+Route::get('/articles/index', [ArticleController::class, 'index'])->name('article.index');
+Route::get('/articles/show/{article}', [ArticleController::class, 'show'])->name('article.show');
+Route::get('/articles/category/{category}', [ArticleController::class, 'byCategory'])->name('article.byCategory');
+Route::get('/articles/user/{user}', [ArticleController::class, 'byUser'])->name('article.byUser');
 
 Route::middleware('auth')->group(function () {
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('article.create');
@@ -27,11 +33,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::patch('/admin/make-writer/{user}', [AdminController::class, 'makeWriter'])->name('admin.makeWriter');
 });
 
-Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
+Route::middleware(['auth', 'revisor'])->group(function () {
+    Route::get('/revisor/dashboard', [RevisorController::class, 'dashboard'])->name('revisor.dashboard');
 
-
-Route::get('/articles/category/{category}', [ArticleController::class, 'byCategory'])->name('article.byCategory');
-Route::get('/articles/user/{user}', [ArticleController::class, 'byUser'])->name('article.byUser');
-
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('article.show');
+    Route::patch('/revisor/article/{article}/accept', [RevisorController::class, 'acceptArticle'])->name('revisor.acceptArticle');
+    Route::patch('/revisor/article/{article}/reject', [RevisorController::class, 'rejectArticle'])->name('revisor.rejectArticle');
+});
 

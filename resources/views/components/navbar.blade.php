@@ -33,6 +33,12 @@
                             <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
                         </li>
                     @endif
+
+                    @if (Auth::user()->is_revisor)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('revisor.dashboard') }}">Dashboard Revisor</a>
+                        </li>
+                    @endif
                 @endauth
 
             </ul>
@@ -84,6 +90,4 @@
         </div>
     </div>
 </nav>
-
- 
- 
+   

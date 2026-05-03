@@ -37,6 +37,30 @@
                     {{ $article->body }}
                 </p>
 
+                @auth
+                    @if (Auth::user()->is_revisor)
+                        <div class="d-flex gap-2 mt-5">
+                            <form action="{{ route('revisor.acceptArticle', $article) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+
+                                <button type="submit" class="btn btn-success">
+                                    Accetta articolo
+                                </button>
+                            </form>
+
+                            <form action="{{ route('revisor.rejectArticle', $article) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+
+                                <button type="submit" class="btn btn-danger">
+                                    Rifiuta articolo
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
+
                 <a href="{{ route('article.index') }}" class="btn btn-secondary mt-4">
                     Torna agli articoli
                 </a>
@@ -46,3 +70,4 @@
     </section>
 
 </x-layout>
+
