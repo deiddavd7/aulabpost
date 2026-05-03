@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Article;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PublicController extends Controller
 {
     public function homepage()
-{
-    $articles = Article::where('is_accepted', true)->orderBy('created_at', 'desc')->take(4)->get();
+    {
+        $articles = Article::where('is_accepted', true)
+            ->orderBy('created_at', 'desc')
+            ->take(6)
+            ->get();
 
-    return view('welcome', compact('articles'));
-} 
+        return view('welcome', compact('articles'));
+    }
 
     public function careers()
     {
@@ -23,30 +26,26 @@ class PublicController extends Controller
     public function careersSubmit(Request $request)
     {
         $request->validate([
-            'role' => 'required',
-            'email' => 'required|email',
-            'message' => 'required|min:10',
+            'role' => 'required|in:admin,revisor,writer',
         ]);
 
-        $user = Auth::user();
+        $user = auth()->user();
 
-        switch ($request->role) {
-            case 'admin':
-                $user->is_admin = null;
-                break;
+        if ($request->role == 'admin') {
+            $user->admin_request = true;
+        }
 
-            case 'revisor':
-                $user->is_revisor = null;
-                break;
+        if ($request->role == 'revisor') {
+            $user->revisor_request = true;
+        }
 
-            case 'writer':
-                $user->is_writer = null;
-                break;
+        if ($request->role == 'writer') {
+            $user->writer_request = true;
         }
 
         $user->save();
 
-        return redirect()->route('homepage')->with('message', 'Richiesta inviata correttamente!');
+        return redirect()->route('homepage')->with('message', 'Richiesta inviata correttamente. Un amministratore la valuterà al più presto.');
     }
 }
-
+  

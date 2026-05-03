@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use App\Models\Article;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
-#[UseFactory(UserFactory::class)]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -22,6 +18,9 @@ class User extends Authenticatable
         'is_admin',
         'is_revisor',
         'is_writer',
+        'admin_request',
+        'revisor_request',
+        'writer_request',
     ];
 
     protected $hidden = [
@@ -37,6 +36,9 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
             'is_revisor' => 'boolean',
             'is_writer' => 'boolean',
+            'admin_request' => 'boolean',
+            'revisor_request' => 'boolean',
+            'writer_request' => 'boolean',
         ];
     }
 
@@ -46,4 +48,4 @@ class User extends Authenticatable
     }
 }
 
-
+  

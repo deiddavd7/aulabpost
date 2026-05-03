@@ -8,35 +8,46 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $adminRequests = User::where('is_admin', null)->get();
-        $revisorRequests = User::where('is_revisor', null)->get();
-        $writerRequests = User::where('is_writer', null)->get();
+        $admin_requests = User::where('is_admin', false)
+            ->where('admin_request', true)
+            ->get();
 
-        return view('admin.dashboard', compact('adminRequests', 'revisorRequests', 'writerRequests'));
+        $revisor_requests = User::where('is_revisor', false)
+            ->where('revisor_request', true)
+            ->get();
+
+        $writer_requests = User::where('is_writer', false)
+            ->where('writer_request', true)
+            ->get();
+
+        return view('admin.dashboard', compact('admin_requests', 'revisor_requests', 'writer_requests'));
     }
 
     public function makeAdmin(User $user)
     {
         $user->is_admin = true;
+        $user->admin_request = false;
         $user->save();
 
-        return redirect()->route('admin.dashboard')->with('message', "Hai reso {$user->name} admin.");
+        return redirect()->route('admin.dashboard')->with('message', "Hai reso {$user->name} Admin.");
     }
 
     public function makeRevisor(User $user)
     {
         $user->is_revisor = true;
+        $user->revisor_request = false;
         $user->save();
 
-        return redirect()->route('admin.dashboard')->with('message', "Hai reso {$user->name} revisor.");
+        return redirect()->route('admin.dashboard')->with('message', "Hai reso {$user->name} Revisor.");
     }
 
     public function makeWriter(User $user)
     {
         $user->is_writer = true;
+        $user->writer_request = false;
         $user->save();
 
-        return redirect()->route('admin.dashboard')->with('message', "Hai reso {$user->name} writer.");
+        return redirect()->route('admin.dashboard')->with('message', "Hai reso {$user->name} Writer.");
     }
 }
 
