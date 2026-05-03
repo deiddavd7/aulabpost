@@ -8,23 +8,17 @@ use App\Http\Controllers\RevisorController;
 
 Route::get('/', [PublicController::class, 'homepage'])->name('homepage');
 
-Route::get('/home', function () {
-    return redirect()->route('homepage');
-})->name('home');
+Route::get('/careers', [PublicController::class, 'careers'])->name('careers');
+Route::post('/careers/submit', [PublicController::class, 'careersSubmit'])->name('careers.submit');
 
-Route::get('/articles/index', [ArticleController::class, 'index'])->name('article.index');
-Route::get('/articles/show/{article}', [ArticleController::class, 'show'])->name('article.show');
-Route::get('/articles/category/{category}', [ArticleController::class, 'byCategory'])->name('article.byCategory');
-Route::get('/articles/user/{user}', [ArticleController::class, 'byUser'])->name('article.byUser');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/careers', [PublicController::class, 'careers'])->name('careers');
-    Route::post('/careers/submit', [PublicController::class, 'careersSubmit'])->name('careers.submit');
-});
+Route::get('/article/index', [ArticleController::class, 'index'])->name('article.index');
+Route::get('/article/show/{article}', [ArticleController::class, 'show'])->name('article.show');
+Route::get('/article/category/{category}', [ArticleController::class, 'byCategory'])->name('article.byCategory');
+Route::get('/article/user/{user}', [ArticleController::class, 'byUser'])->name('article.byUser');
 
 Route::middleware(['auth', 'writer'])->group(function () {
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('article.create');
-    Route::post('/articles/store', [ArticleController::class, 'store'])->name('article.store');
+    Route::get('/article/create', [ArticleController::class, 'create'])->name('article.create');
+    Route::post('/article/store', [ArticleController::class, 'store'])->name('article.store');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -38,7 +32,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth', 'revisor'])->group(function () {
     Route::get('/revisor/dashboard', [RevisorController::class, 'dashboard'])->name('revisor.dashboard');
 
-    Route::patch('/revisor/article/{article}/accept', [RevisorController::class, 'acceptArticle'])->name('revisor.acceptArticle');
-    Route::patch('/revisor/article/{article}/reject', [RevisorController::class, 'rejectArticle'])->name('revisor.rejectArticle');
+    Route::patch('/revisor/accept/article/{article}', [RevisorController::class, 'acceptArticle'])->name('revisor.acceptArticle');
+    Route::patch('/revisor/reject/article/{article}', [RevisorController::class, 'rejectArticle'])->name('revisor.rejectArticle');
+    Route::patch('/revisor/undo/article/{article}', [RevisorController::class, 'undoArticle'])->name('revisor.undoArticle');
 });
 

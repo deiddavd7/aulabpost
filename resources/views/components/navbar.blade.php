@@ -1,13 +1,14 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('homepage') }}">The Aulab Post</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
+            {{-- LINK SINISTRA --}}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
@@ -19,62 +20,83 @@
                 </li>
 
                 @auth
-                    @if (auth()->user()->is_writer)
+                    @if (Auth::user()->is_writer)
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('article.create') }}">Inserisci articolo</a>
                         </li>
                     @endif
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('careers') }}">Lavora con noi</a>
-                    </li>
-
-                    @if (auth()->user()->is_admin)
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
-                        </li>
-                    @endif
-
-                    @if (auth()->user()->is_revisor)
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('revisor.dashboard') }}">Dashboard Revisor</a>
-                        </li>
-                    @endif
                 @endauth
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('careers') }}">Lavora con noi</a>
+                </li>
 
             </ul>
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            {{-- RICERCA --}}
+            <form class="d-flex me-3" role="search">
+                <input class="form-control me-2" type="search" placeholder="Cerca" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Cerca</button>
+            </form>
+
+            {{-- LINK DESTRA --}}
+            <ul class="navbar-nav mb-2 mb-lg-0">
 
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Accedi</a>
+                        <a class="nav-link" href="{{ route('register') }}">Registrati</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Registrati</a>
+                        <a class="nav-link" href="{{ route('login') }}">Accedi</a>
                     </li>
                 @endguest
 
                 @auth
-                    <li class="nav-item">
-                        <span class="nav-link">
-                            Ciao, {{ auth()->user()->name }}
-                        </span>
-                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Ciao, {{ Auth::user()->name }}
+                        </a>
 
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-link nav-link">
-                                Logout
-                            </button>
-                        </form>
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            @if (Auth::user()->is_admin)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                        Dashboard Admin
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if (Auth::user()->is_revisor)
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('revisor.dashboard') }}">
+                                        Dashboard Revisor
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if (Auth::user()->is_admin || Auth::user()->is_revisor)
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            @endif
+
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul>
                     </li>
                 @endauth
 
-            </ul>
-
+             </ul>
         </div>
     </div>
 </nav>

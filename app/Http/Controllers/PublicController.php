@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Article;
+use App\Mail\CareerRequestMail;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
-class PublicController extends Controller
+class PublicController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('auth', except: ['homepage']),
+        ];
+    }
+
     public function homepage()
     {
         $articles = Article::where('is_accepted', true)
             ->orderBy('created_at', 'desc')
-            ->take(6)
+            ->take(4)
             ->get();
 
         return view('welcome', compact('articles'));
@@ -26,26 +37,38 @@ class PublicController extends Controller
     public function careersSubmit(Request $request)
     {
         $request->validate([
-            'role' => 'required|in:admin,revisor,writer',
+            'role' => 'required',
+            'email' => 'required|email',
+            'message' => 'required|min:10',
         ]);
 
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if ($request->role == 'admin') {
-            $user->admin_request = true;
-        }
+        $role = $request->role;
+        $email = $request->email;
+        $message = $request->message;
 
-        if ($request->role == 'revisor') {
-            $user->revisor_request = true;
-        }
+        $data = compact('role', 'email', 'message', 'user');
 
-        if ($request->role == 'writer') {
-            $user->writer_request = true;
+        Mail::to('admin@theaulabpost.it')->send(new CareerRequestMail($data));
+
+        switch ($role) {
+            case 'admin':
+                $user->is_admin = null;
+                break;
+
+            case 'revisor':
+                $user->is_revisor = null;
+                break;
+
+            case 'writer':
+                $user->is_writer = null;
+                break;
         }
 
         $user->save();
 
-        return redirect()->route('homepage')->with('message', 'Richiesta inviata correttamente. Un amministratore la valuterà al più presto.');
+        return redirect(route('homepage'))->with('message', 'Richiesta inviata correttamente');
     }
 }
-  
+
