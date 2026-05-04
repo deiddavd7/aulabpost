@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\RevisorController;
+use App\Http\Controllers\WriterController;
 
 Route::get('/', [PublicController::class, 'homepage'])->name('homepage');
 
@@ -24,6 +25,11 @@ Route::get('/article/user/{user}', [ArticleController::class, 'byUser'])->name('
 Route::middleware(['auth', 'writer'])->group(function () {
     Route::get('/article/create', [ArticleController::class, 'create'])->name('article.create');
     Route::post('/article/store', [ArticleController::class, 'store'])->name('article.store');
+
+    Route::get('/writer/dashboard', [WriterController::class, 'dashboard'])->name('writer.dashboard');
+    Route::get('/writer/article/edit/{article}', [WriterController::class, 'edit'])->name('writer.article.edit');
+    Route::patch('/writer/article/update/{article}', [WriterController::class, 'update'])->name('writer.article.update');
+    Route::delete('/writer/article/delete/{article}', [WriterController::class, 'destroy'])->name('writer.article.delete');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
