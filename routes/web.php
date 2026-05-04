@@ -32,6 +32,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::patch('/admin/make-admin/{user}', [AdminController::class, 'makeAdmin'])->name('admin.makeAdmin');
     Route::patch('/admin/make-revisor/{user}', [AdminController::class, 'makeRevisor'])->name('admin.makeRevisor');
     Route::patch('/admin/make-writer/{user}', [AdminController::class, 'makeWriter'])->name('admin.makeWriter');
+
+    Route::patch('/admin/tag/update/{tag}', [AdminController::class, 'updateTag'])->name('admin.tag.update');
+    Route::delete('/admin/tag/delete/{tag}', [AdminController::class, 'deleteTag'])->name('admin.tag.delete');
+
+    Route::patch('/admin/category/update/{category}', [AdminController::class, 'updateCategory'])->name('admin.category.update');
+    Route::delete('/admin/category/delete/{category}', [AdminController::class, 'deleteCategory'])->name('admin.category.delete');
 });
 
 Route::middleware(['auth', 'revisor'])->group(function () {
