@@ -62,6 +62,7 @@ class WriterController extends Controller
 
         $article->update([
             'title' => $request->title,
+            'slug' => Article::generateSlug($request->title, $article->id),
             'subtitle' => $request->subtitle,
             'body' => $request->body,
             'image' => $imagePath,
@@ -111,4 +112,4 @@ class WriterController extends Controller
         return redirect(route('writer.dashboard'))->with('message', 'Articolo cancellato correttamente');
     }
 }
-
+  

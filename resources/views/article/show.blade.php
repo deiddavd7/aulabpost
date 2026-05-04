@@ -26,6 +26,11 @@
                         </a>
                     </p>
 
+                    <p class="small mb-1">
+                        Tempo di lettura:
+                        <strong>{{ $article->reading_time }} min</strong>
+                    </p>
+
                     <p class="small text-muted">
                         Pubblicato il {{ $article->created_at->format('d/m/Y') }}
                     </p>

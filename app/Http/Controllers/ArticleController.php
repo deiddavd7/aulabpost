@@ -38,6 +38,7 @@ class ArticleController extends Controller
 
         $article = Article::create([
             'title' => $request->title,
+            'slug' => Article::generateSlug($request->title),
             'subtitle' => $request->subtitle,
             'body' => $request->body,
             'image' => $request->hasFile('image') ? $request->file('image')->store('images', 'public') : null,
