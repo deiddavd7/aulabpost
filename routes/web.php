@@ -8,6 +8,10 @@ use App\Http\Controllers\RevisorController;
 
 Route::get('/', [PublicController::class, 'homepage'])->name('homepage');
 
+Route::get('/home', function () {
+    return redirect(route('homepage'));
+})->name('home');
+
 Route::get('/careers', [PublicController::class, 'careers'])->name('careers');
 Route::post('/careers/submit', [PublicController::class, 'careersSubmit'])->name('careers.submit');
 

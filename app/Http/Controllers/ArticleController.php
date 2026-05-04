@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -34,6 +33,7 @@ class ArticleController extends Controller
             'body' => 'required|min:10',
             'image' => 'nullable|image',
             'category_id' => 'required|exists:categories,id',
+            'tags' => 'nullable|string',
         ]);
 
         $article = Article::create([
@@ -45,6 +45,22 @@ class ArticleController extends Controller
             'user_id' => Auth::id(),
             'is_accepted' => null,
         ]);
+
+        if ($request->tags) {
+            $tags = explode(',', $request->tags);
+
+            foreach ($tags as $tagName) {
+                $cleanTagName = strtolower(trim($tagName));
+
+                if ($cleanTagName !== '') {
+                    $tag = Tag::updateOrCreate([
+                        'name' => $cleanTagName,
+                    ]);
+
+                    $article->tags()->attach($tag->id);
+                }
+            }
+        }
 
         return redirect(route('homepage'))->with('message', 'Articolo creato correttamente, ora è in attesa di revisione');
     }

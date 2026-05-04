@@ -31,7 +31,8 @@
                     <div class="card h-100 shadow-sm">
 
                         @if ($article->image)
-                            <img src="{{ Storage::url($article->image) }}" class="card-img-top" alt="{{ $article->title }}">
+                            <img src="{{ Storage::url($article->image) }}" class="card-img-top"
+                                alt="{{ $article->title }}">
                         @else
                             <img src="https://picsum.photos/300/200" class="card-img-top" alt="Immagine articolo">
                         @endif
@@ -47,12 +48,22 @@
                                 </a>
                             </p>
 
-                            <p class="small mb-3">
+                            <p class="small mb-1">
                                 Autore:
                                 <a href="{{ route('article.byUser', $article->user) }}">
                                     {{ $article->user->name }}
                                 </a>
                             </p>
+
+                            @if ($article->tags->count())
+                                <div class="mb-3">
+                                    @foreach ($article->tags as $tag)
+                                        <span class="badge text-bg-secondary me-1">
+                                            #{{ $tag->name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
 
                             <a href="{{ route('article.show', $article) }}" class="btn btn-primary mt-auto">
                                 Leggi
